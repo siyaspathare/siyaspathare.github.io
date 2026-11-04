@@ -15,13 +15,13 @@ const socials = [
   <div class="wrap footer__inner">
     <p class="footer__big">
       Let's make something <span class="hand">colourful</span>
-      <Star size={44} color="var(--pink)" class="footer__star" />
+      <Star size={44} color="var(--yellow)" class="footer__star" />
     </p>
     <div class="footer__links">
       {d?.email && <a class="btn" href={`mailto:${d.email}`}>Say hi ✉</a>}
       {
         socials.map((s) => (
-          <a class="btn btn--sky" href={s.href} target="_blank" rel="noopener">
+          <a class="btn btn--mint" href={s.href} target="_blank" rel="noopener">
             {s.label}
           </a>
         ))
@@ -33,8 +33,8 @@ const socials = [
 
 <style>
   .footer {
-    background: var(--night);
-    color: var(--cream);
+    background: var(--hot);
+    color: var(--ink);
     padding: 5rem 0 2rem;
     border-top: 4px solid var(--ink);
   }
@@ -53,7 +53,9 @@ const socials = [
   }
 
   .footer__big .hand {
-    color: var(--sun);
+    color: var(--yellow);
+    -webkit-text-stroke: 2px var(--ink);
+    paint-order: stroke fill;
     font-size: 1.15em;
   }
 
@@ -72,7 +74,7 @@ const socials = [
   .footer__small {
     margin: 2rem 0 0;
     font-size: 0.9rem;
-    opacity: 0.7;
+    opacity: 0.85;
   }
 
   @keyframes footer-spin {

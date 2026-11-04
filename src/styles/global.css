@@ -3,15 +3,15 @@
 }
 
 :root {
-  --night: #1b1f4b;
-  --night-deep: #11143a;
-  --sun: #ffc31f;
-  --orange: #ff7a1f;
-  --pink: #ff5fa2;
-  --sky: #2bb3e6;
-  --leaf: #7ed957;
-  --cream: #fff4e0;
-  --ink: #16142a;
+  /* Siya's palette */
+  --mint: #47e5bc;
+  --yellow: #ffe66d;
+  --blush: #ffcfd2;
+  --rose: #ffafc5;
+  --hot: #ff37a6;
+
+  --cream: #fff4f5; /* page background: a lighter tint of blush */
+  --ink: #16142a; /* outlines and text */
 
   --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-hand: 'Caveat Brush', cursive;
@@ -58,7 +58,7 @@ a {
 }
 
 :focus-visible {
-  outline: 3px dashed var(--pink);
+  outline: 3px dashed var(--ink);
   outline-offset: 4px;
 }
 
@@ -89,7 +89,7 @@ a {
   padding: 0.7em 1.3em;
   border: 3px solid var(--ink);
   border-radius: 999px;
-  background: var(--sun);
+  background: var(--yellow);
   color: var(--ink);
   font: 700 1rem/1 var(--font-display);
   text-decoration: none;
@@ -110,12 +110,12 @@ a {
   box-shadow: 1px 1px 0 var(--ink);
 }
 
-.btn--pink {
-  background: var(--pink);
+.btn--hot {
+  background: var(--hot);
 }
 
-.btn--sky {
-  background: var(--sky);
+.btn--mint {
+  background: var(--mint);
 }
 
 /* ---------- reduced motion ---------- */
@@ -145,7 +145,7 @@ a {
   gap: 0.1rem;
   max-width: calc(100% - 2rem);
   padding: 0.55rem 1.2rem;
-  background: var(--sun);
+  background: var(--yellow);
   color: var(--ink);
   border: 3px solid var(--ink);
   border-radius: 999px;

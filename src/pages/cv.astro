@@ -12,11 +12,11 @@ const { Content } = await render(cv);
   <section class="page">
     <div class="wrap">
       <div class="card" data-reveal>
-        <Star size={60} color="var(--sun)" class="card__star" />
+        <Star size={60} color="var(--yellow)" class="card__star" />
         <h1>CV</h1>
         {
           cv.data.cvPdf && (
-            <a class="btn btn--pink" href={cv.data.cvPdf} download>
+            <a class="btn btn--hot" href={cv.data.cvPdf} download>
               Download PDF ↓
             </a>
           )
@@ -34,8 +34,8 @@ const { Content } = await render(cv);
     min-height: 100svh;
     padding: 9rem 0 6rem;
     background:
-      radial-gradient(circle at 15% 20%, rgba(255, 95, 162, 0.25), transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(126, 217, 87, 0.3), transparent 40%),
+      radial-gradient(circle at 15% 20%, rgba(255, 55, 166, 0.18), transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(71, 229, 188, 0.3), transparent 40%),
       var(--cream);
   }
 
@@ -68,7 +68,7 @@ const { Content } = await render(cv);
     display: inline-block;
     margin: 2.25rem 0 0.5rem;
     padding: 0.1em 0.5em;
-    background: var(--sun);
+    background: var(--yellow);
     border: 2px solid var(--ink);
     border-radius: 8px;
     font-size: 1.4rem;

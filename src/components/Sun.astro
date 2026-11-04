@@ -11,7 +11,7 @@ const rays = Array.from({ length: 16 }, (_, i) => {
   return {
     deg: i * 22.5,
     d: `M90 58 C86 44 98 ${tip + 18} 100 ${tip} C102 ${tip + 18} 114 44 110 58 Z`,
-    fill: long ? 'var(--sun)' : 'var(--orange)',
+    fill: long ? 'var(--yellow)' : 'var(--rose)',
   };
 });
 const spiral = Array.from({ length: 90 }, (_, i) => {
@@ -36,8 +36,8 @@ const spiral = Array.from({ length: 90 }, (_, i) => {
       ))
     }
   </g>
-  <circle cx="100" cy="100" r="46" fill="var(--sun)" stroke="var(--ink)" stroke-width="4"></circle>
-  <polyline points={spiral} fill="none" stroke="var(--orange)" stroke-width="3.5" stroke-linecap="round"></polyline>
+  <circle cx="100" cy="100" r="46" fill="var(--yellow)" stroke="var(--ink)" stroke-width="4"></circle>
+  <polyline points={spiral} fill="none" stroke="var(--hot)" stroke-width="3.5" stroke-linecap="round"></polyline>
 </svg>
 
 <style>

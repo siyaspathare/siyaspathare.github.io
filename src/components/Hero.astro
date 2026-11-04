@@ -11,18 +11,18 @@ interface Props {
 const { featured, tagline } = Astro.props;
 
 const letters = [
-  { ch: 'S', color: 'var(--sun)' },
-  { ch: 'I', color: 'var(--pink)' },
-  { ch: 'Y', color: 'var(--sky)' },
-  { ch: 'A', color: 'var(--leaf)' },
+  { ch: 'S', color: 'var(--yellow)' },
+  { ch: 'I', color: 'var(--mint)' },
+  { ch: 'Y', color: 'var(--blush)' },
+  { ch: 'A', color: 'var(--rose)' },
 ];
 
 const stars = [
-  { top: '12%', left: '8%', size: 34, color: 'var(--sun)' },
+  { top: '12%', left: '8%', size: 34, color: 'var(--yellow)' },
   { top: '22%', left: '46%', size: 22, color: 'var(--cream)' },
-  { top: '70%', left: '6%', size: 46, color: 'var(--pink)' },
-  { top: '84%', left: '40%', size: 28, color: 'var(--sun)' },
-  { top: '8%', left: '88%', size: 30, color: 'var(--sky)' },
+  { top: '70%', left: '6%', size: 46, color: 'var(--rose)' },
+  { top: '84%', left: '40%', size: 28, color: 'var(--yellow)' },
+  { top: '8%', left: '88%', size: 30, color: 'var(--mint)' },
   { top: '58%', left: '52%', size: 18, color: 'var(--cream)' },
 ];
 
@@ -58,7 +58,7 @@ const stickerPos = ['sticker--a', 'sticker--b', 'sticker--c'];
       {tagline && <p class="hero__tagline" data-hero-fade>{tagline}</p>}
       <div class="hero__cta" data-hero-fade>
         <a class="btn" href="#work">See my work ↓</a>
-        <a class="btn btn--pink" href="/about/">About me</a>
+        <a class="btn btn--mint" href="/about/">About me</a>
       </div>
     </div>
 
@@ -89,8 +89,8 @@ const stickerPos = ['sticker--a', 'sticker--b', 'sticker--c'];
     display: grid;
     align-items: center;
     padding: 7rem 0 4rem;
-    background: radial-gradient(circle at 70% 40%, #2a2f6e 0%, var(--night) 45%, var(--night-deep) 100%);
-    color: var(--cream);
+    background: radial-gradient(circle at 72% 42%, var(--rose) 0%, var(--hot) 55%);
+    color: var(--ink);
     overflow: hidden;
     border-bottom: 4px solid var(--ink);
   }
@@ -98,7 +98,7 @@ const stickerPos = ['sticker--a', 'sticker--b', 'sticker--c'];
   .hero__dots {
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255, 244, 224, 0.5) 1.2px, transparent 1.6px);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.7) 1.2px, transparent 1.6px);
     background-size: 46px 46px;
     opacity: 0.35;
     mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
@@ -133,7 +133,9 @@ const stickerPos = ['sticker--a', 'sticker--b', 'sticker--c'];
   .hero__hello {
     margin: 0;
     font-size: clamp(1.8rem, 4vw, 2.8rem);
-    color: var(--sun);
+    color: var(--yellow);
+    -webkit-text-stroke: 1.5px var(--ink);
+    paint-order: stroke fill;
     transform: rotate(-4deg);
   }
 
