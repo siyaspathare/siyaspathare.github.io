@@ -1,0 +1,25 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Gallery from '../components/Gallery.astro';
+
+const works = (await getCollection('works')).sort(
+  (a, b) => a.data.order - b.data.order || (b.data.year ?? 0) - (a.data.year ?? 0),
+);
+const featured = works.filter((w) => w.data.featured);
+const heroPicks = (featured.length ? featured : works).slice(0, 3);
+const about = await getEntry('pages', 'about');
+
+const og = heroPicks[0]
+  ? await getImage({ src: heroPicks[0].data.image, width: 1200, format: 'jpeg' })
+  : undefined;
+---
+
+<Base ogImage={og?.src}>
+  <Hero featured={heroPicks} tagline={about?.data.tagline} />
+  <Marquee />
+  <Gallery works={works} />
+</Base>

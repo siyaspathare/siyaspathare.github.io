@@ -1,0 +1,145 @@
+---
+import { getEntry, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Sun from '../components/Sun.astro';
+import Star from '../components/Star.astro';
+
+const about = await getEntry('pages', 'about');
+if (!about) throw new Error('Missing src/content/pages/about.md');
+const { Content } = await render(about);
+const d = about.data;
+---
+
+<Base title="About" description={d.tagline}>
+  <section class="page">
+    <div class="wrap page__inner">
+      <div class="portrait" data-reveal>
+        {
+          d.photo ? (
+            <figure class="portrait__frame">
+              <Image src={d.photo} alt="Portrait of Siya" widths={[360, 720]} sizes="(max-width: 800px) 80vw, 30vw" />
+            </figure>
+          ) : (
+            <Sun size="100%" />
+          )
+        }
+        <Star size={56} color="var(--pink)" class="portrait__star" />
+      </div>
+
+      <div class="bio" data-reveal>
+        <p class="hand kicker">nice to meet you!</p>
+        <h1>About <span>Siya</span></h1>
+        {d.tagline && <p class="lede">{d.tagline}</p>}
+        <div class="prose">
+          <Content />
+        </div>
+        <div class="actions">
+          {d.email && <a class="btn" href={`mailto:${d.email}`}>Email me ✉</a>}
+          <a class="btn btn--sky" href="/cv/">View CV</a>
+          <a class="btn btn--pink" href="/#work">See the work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page {
+    min-height: 100svh;
+    padding: 9rem 0 6rem;
+    background:
+      radial-gradient(circle at 85% 15%, rgba(255, 195, 31, 0.35), transparent 40%),
+      radial-gradient(circle at 10% 90%, rgba(43, 179, 230, 0.25), transparent 40%),
+      var(--cream);
+  }
+
+  .page__inner {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  .portrait {
+    position: relative;
+    max-width: 420px;
+    width: 100%;
+    justify-self: center;
+  }
+
+  .portrait__frame {
+    margin: 0;
+    padding: 10px;
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-pop);
+    rotate: -3deg;
+  }
+
+  .portrait__frame :global(img) {
+    border-radius: 10px;
+  }
+
+  :global(.portrait__star) {
+    position: absolute;
+    top: -18px;
+    right: -10px;
+    animation: p-spin 9s linear infinite;
+  }
+
+  .kicker {
+    margin: 0;
+    font-size: 2rem;
+    color: var(--pink);
+    rotate: -3deg;
+  }
+
+  h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+
+  h1 span {
+    color: var(--sky);
+    -webkit-text-stroke: 3px var(--ink);
+    paint-order: stroke fill;
+  }
+
+  .lede {
+    font-size: 1.3rem;
+    font-weight: 600;
+    max-width: 40ch;
+  }
+
+  .prose {
+    max-width: 60ch;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+
+  @keyframes p-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 800px) {
+    .page__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .portrait {
+      max-width: 280px;
+    }
+  }
+</style>

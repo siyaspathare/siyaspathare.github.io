@@ -1,0 +1,54 @@
+---
+interface Props {
+  size?: number | string;
+  class?: string;
+}
+const { size = 320, class: className } = Astro.props;
+// Wavy flame-like rays (alternating long/short) + an Archimedean spiral face, matching Siya's sun paintings.
+const rays = Array.from({ length: 16 }, (_, i) => {
+  const long = i % 2 === 0;
+  const tip = long ? 6 : 22;
+  return {
+    deg: i * 22.5,
+    d: `M90 58 C86 44 98 ${tip + 18} 100 ${tip} C102 ${tip + 18} 114 44 110 58 Z`,
+    fill: long ? 'var(--sun)' : 'var(--orange)',
+  };
+});
+const spiral = Array.from({ length: 90 }, (_, i) => {
+  const t = (i / 89) * Math.PI * 6;
+  const r = 2 + t * 1.45;
+  return `${(100 + r * Math.cos(t)).toFixed(1)},${(100 + r * Math.sin(t)).toFixed(1)}`;
+}).join(' ');
+---
+
+<svg class:list={['sun', className]} width={size} height={size} viewBox="0 0 200 200" aria-hidden="true">
+  <g class="sun__rays">
+    {
+      rays.map((r) => (
+        <path
+          d={r.d}
+          transform={`rotate(${r.deg} 100 100)`}
+          fill={r.fill}
+          stroke="var(--ink)"
+          stroke-width="3"
+          stroke-linejoin="round"
+        />
+      ))
+    }
+  </g>
+  <circle cx="100" cy="100" r="46" fill="var(--sun)" stroke="var(--ink)" stroke-width="4"></circle>
+  <polyline points={spiral} fill="none" stroke="var(--orange)" stroke-width="3.5" stroke-linecap="round"></polyline>
+</svg>
+
+<style>
+  .sun__rays {
+    transform-origin: 100px 100px;
+    animation: sun-spin 40s linear infinite;
+  }
+
+  @keyframes sun-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

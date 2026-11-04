@@ -1,0 +1,249 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Sun from './Sun.astro';
+import Star from './Star.astro';
+
+interface Props {
+  featured: CollectionEntry<'works'>[];
+  tagline?: string;
+}
+const { featured, tagline } = Astro.props;
+
+const letters = [
+  { ch: 'S', color: 'var(--sun)' },
+  { ch: 'I', color: 'var(--pink)' },
+  { ch: 'Y', color: 'var(--sky)' },
+  { ch: 'A', color: 'var(--leaf)' },
+];
+
+const stars = [
+  { top: '12%', left: '8%', size: 34, color: 'var(--sun)' },
+  { top: '22%', left: '46%', size: 22, color: 'var(--cream)' },
+  { top: '70%', left: '6%', size: 46, color: 'var(--pink)' },
+  { top: '84%', left: '40%', size: 28, color: 'var(--sun)' },
+  { top: '8%', left: '88%', size: 30, color: 'var(--sky)' },
+  { top: '58%', left: '52%', size: 18, color: 'var(--cream)' },
+];
+
+const stickerPos = ['sticker--a', 'sticker--b', 'sticker--c'];
+---
+
+<section class="hero" data-hero>
+  <div class="hero__dots" aria-hidden="true"></div>
+
+  {
+    stars.map((s) => (
+      <Star
+        size={s.size}
+        color={s.color}
+        class="hero__star"
+        style={`top:${s.top};left:${s.left}`}
+      />
+    ))
+  }
+
+  <div class="wrap hero__inner">
+    <div class="hero__text">
+      <p class="hero__hello hand" data-hero-fade>hello, I'm</p>
+      <h1 class="hero__name" aria-label="Siya">
+        {
+          letters.map((l) => (
+            <span class="hero__letter" style={`--c:${l.color}`} aria-hidden="true" data-hero-letter>
+              {l.ch}
+            </span>
+          ))
+        }
+      </h1>
+      {tagline && <p class="hero__tagline" data-hero-fade>{tagline}</p>}
+      <div class="hero__cta" data-hero-fade>
+        <a class="btn" href="#work">See my work ↓</a>
+        <a class="btn btn--pink" href="/about/">About me</a>
+      </div>
+    </div>
+
+    <div class="hero__art" data-hero-art>
+      <Sun class="hero__sun" size="100%" />
+      {
+        featured.slice(0, 3).map((w, i) => (
+          <figure class:list={['sticker', stickerPos[i]]} data-sticker data-depth={(i + 1) * 0.6}>
+            <Image
+              src={w.data.image}
+              alt={w.data.title}
+              widths={[240, 400, 600]}
+              sizes="(max-width: 800px) 40vw, 20vw"
+              loading="eager"
+              fetchpriority={i === 0 ? 'high' : 'auto'}
+            />
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    padding: 7rem 0 4rem;
+    background: radial-gradient(circle at 70% 40%, #2a2f6e 0%, var(--night) 45%, var(--night-deep) 100%);
+    color: var(--cream);
+    overflow: hidden;
+    border-bottom: 4px solid var(--ink);
+  }
+
+  .hero__dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 244, 224, 0.5) 1.2px, transparent 1.6px);
+    background-size: 46px 46px;
+    opacity: 0.35;
+    mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
+  }
+
+  :global(.hero__star) {
+    position: absolute;
+    animation: hero-twinkle 3.5s ease-in-out infinite;
+  }
+
+  :global(.hero__star:nth-of-type(2n)) {
+    animation-delay: -1.5s;
+  }
+
+  :global(.hero__star:nth-of-type(3n)) {
+    animation-delay: -2.6s;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .hero__text {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero__hello {
+    margin: 0;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--sun);
+    transform: rotate(-4deg);
+  }
+
+  .hero__name {
+    margin: 0;
+    display: flex;
+    font-size: clamp(6rem, 19vw, 15rem);
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+  }
+
+  .hero__letter {
+    display: inline-block;
+    color: var(--c);
+    -webkit-text-stroke: 4px var(--ink);
+    paint-order: stroke fill;
+    text-shadow: 6px 6px 0 var(--ink);
+    transition:
+      translate 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+      rotate 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .hero__letter:hover {
+    translate: 0 -0.08em;
+    rotate: -6deg;
+  }
+
+  .hero__tagline {
+    max-width: 30ch;
+    margin: 1.25rem 0 2rem;
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .hero__art {
+    position: relative;
+    aspect-ratio: 1;
+    width: min(100%, 560px);
+    justify-self: center;
+  }
+
+  :global(.hero__sun) {
+    position: absolute;
+    top: -22%;
+    right: -18%;
+    width: 70%;
+    height: 70%;
+  }
+
+  .sticker {
+    position: absolute;
+    margin: 0;
+    width: 46%;
+    padding: 8px;
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: var(--shadow-pop);
+    will-change: transform;
+  }
+
+  .sticker img {
+    border-radius: 4px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .sticker--a {
+    top: 2%;
+    left: 4%;
+    rotate: -8deg;
+  }
+
+  .sticker--b {
+    top: 18%;
+    right: 0;
+    rotate: 7deg;
+  }
+
+  .sticker--c {
+    bottom: 0;
+    left: 26%;
+    rotate: -3deg;
+  }
+
+  @keyframes hero-twinkle {
+    50% {
+      transform: scale(0.55) rotate(30deg);
+      opacity: 0.55;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .hero {
+      padding-top: 6rem;
+    }
+
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__art {
+      width: min(100%, 420px);
+    }
+  }
+</style>

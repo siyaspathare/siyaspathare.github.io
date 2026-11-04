@@ -1,0 +1,83 @@
+---
+import { getEntry } from 'astro:content';
+import Star from './Star.astro';
+
+const about = await getEntry('pages', 'about');
+const d = about?.data;
+const socials = [
+  { label: 'Instagram', href: d?.instagram },
+  { label: 'Behance', href: d?.behance },
+  { label: 'LinkedIn', href: d?.linkedin },
+].filter((s) => s.href);
+---
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <p class="footer__big">
+      Let's make something <span class="hand">colourful</span>
+      <Star size={44} color="var(--pink)" class="footer__star" />
+    </p>
+    <div class="footer__links">
+      {d?.email && <a class="btn" href={`mailto:${d.email}`}>Say hi ✉</a>}
+      {
+        socials.map((s) => (
+          <a class="btn btn--sky" href={s.href} target="_blank" rel="noopener">
+            {s.label}
+          </a>
+        ))
+      }
+    </div>
+    <p class="footer__small">© {new Date().getFullYear()} Siya. All artwork belongs to the artist.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--night);
+    color: var(--cream);
+    padding: 5rem 0 2rem;
+    border-top: 4px solid var(--ink);
+  }
+
+  .footer__inner {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .footer__big {
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .footer__big .hand {
+    color: var(--sun);
+    font-size: 1.15em;
+  }
+
+  :global(.footer__star) {
+    display: inline-block;
+    vertical-align: middle;
+    animation: footer-spin 8s linear infinite;
+  }
+
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .footer__small {
+    margin: 2rem 0 0;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  @keyframes footer-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

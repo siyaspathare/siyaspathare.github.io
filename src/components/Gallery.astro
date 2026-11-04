@@ -1,0 +1,262 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { CATEGORIES, type CategoryKey } from '../lib/categories';
+import Star from './Star.astro';
+
+interface Props {
+  works: CollectionEntry<'works'>[];
+}
+const { works } = Astro.props;
+
+// Only show filter chips for categories that actually have work.
+const used = (Object.keys(CATEGORIES) as CategoryKey[]).filter((k) =>
+  works.some((w) => w.data.category === k),
+);
+
+const items = await Promise.all(
+  works.map(async (w) => {
+    const { width, height } = w.data.image;
+    const scale = Math.min(1, 2400 / Math.max(width, height));
+    const full = await getImage({
+      src: w.data.image,
+      width: Math.round(width * scale),
+      format: 'webp',
+      quality: 85,
+    });
+    return {
+      w,
+      full,
+      fullW: Math.round(width * scale),
+      fullH: Math.round(height * scale),
+    };
+  }),
+);
+---
+
+<section class="gallery" id="work">
+  <div class="wrap">
+    <header class="gallery__head">
+      <h2>
+        The <span class="hand">work</span>
+        <Star size={48} color="var(--pink)" class="gallery__star" />
+      </h2>
+      {
+        used.length > 1 && (
+          <div class="chips" role="group" aria-label="Filter artwork by category" data-filters>
+            <button type="button" class="chip" aria-pressed="true" data-filter="all">
+              All
+            </button>
+            {used.map((k) => (
+              <button
+                type="button"
+                class="chip"
+                aria-pressed="false"
+                data-filter={k}
+                style={`--chip:${CATEGORIES[k].color}`}
+              >
+                {CATEGORIES[k].label}
+              </button>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    <ul class="grid" data-grid>
+      {
+        items.map(({ w, full, fullW, fullH }, i) => (
+          <li
+            class="tile"
+            data-category={w.data.category}
+            style={`--accent:${CATEGORIES[w.data.category].color};view-transition-name:tile-${i}`}
+            data-tile
+          >
+            <a
+              href={full.src}
+              data-pswp-width={fullW}
+              data-pswp-height={fullH}
+              data-caption={w.data.title}
+              data-sub={[w.data.medium, w.data.year].filter(Boolean).join(' · ')}
+              aria-label={`Open “${w.data.title}” full size`}
+            >
+              <Image
+                src={w.data.image}
+                alt={w.data.title}
+                widths={[400, 700, 1000]}
+                sizes="(max-width: 600px) 92vw, (max-width: 1000px) 46vw, 31vw"
+                loading={i < 3 ? 'eager' : 'lazy'}
+              />
+            </a>
+            <div class="tile__meta">
+              <span class="tile__title">{w.data.title}</span>
+              <span class="tile__cat">{CATEGORIES[w.data.category].label}</span>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .gallery {
+    padding: 6rem 0 7rem;
+    background:
+      radial-gradient(circle at 10% 10%, rgba(255, 95, 162, 0.18), transparent 35%),
+      radial-gradient(circle at 90% 60%, rgba(43, 179, 230, 0.18), transparent 35%),
+      var(--cream);
+  }
+
+  .gallery__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(3rem, 9vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  h2 .hand {
+    color: var(--pink);
+    -webkit-text-stroke: 2px var(--ink);
+    paint-order: stroke fill;
+    font-size: 1.15em;
+  }
+
+  :global(.gallery__star) {
+    display: inline-block;
+    vertical-align: top;
+    animation: g-spin 10s linear infinite;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .chip {
+    --chip: var(--leaf);
+    padding: 0.55em 1.1em;
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    background: #fff;
+    font: 700 1rem/1 var(--font-display);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition:
+      transform 0.15s,
+      box-shadow 0.15s,
+      background 0.2s;
+  }
+
+  .chip:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--chip);
+  }
+
+  .grid {
+    columns: 3 300px;
+    column-gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tile {
+    --tilt: -1.5deg;
+    break-inside: avoid;
+    margin: 0 0 2.25rem;
+    padding: 10px 10px 0;
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 6px 6px 0 var(--ink);
+    rotate: var(--tilt);
+    transition:
+      rotate 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.3s;
+  }
+
+  .tile:nth-child(3n + 2) {
+    --tilt: 1.5deg;
+  }
+
+  .tile:nth-child(4n + 3) {
+    --tilt: -0.5deg;
+  }
+
+  .tile:hover,
+  .tile:focus-within {
+    rotate: 0deg;
+    scale: 1.03;
+    box-shadow: 10px 10px 0 var(--accent);
+    z-index: 1;
+    position: relative;
+  }
+
+  .tile[hidden] {
+    display: none;
+  }
+
+  .tile a {
+    display: block;
+    border-radius: calc(var(--radius) - 8px);
+    overflow: hidden;
+    cursor: zoom-in;
+  }
+
+  .tile img {
+    width: 100%;
+    transition: scale 0.5s ease;
+  }
+
+  .tile:hover img {
+    scale: 1.05;
+  }
+
+  .tile__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 0.25rem 0.85rem;
+  }
+
+  .tile__title {
+    font-weight: 800;
+    font-size: 1.1rem;
+    line-height: 1.2;
+  }
+
+  .tile__cat {
+    flex-shrink: 0;
+    padding: 0.2em 0.7em;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    background: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  @keyframes g-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Sun from '../components/Sun.astro';
+---
+
+<Base title="Lost in space">
+  <section class="lost">
+    <Sun size={220} />
+    <h1>Oops, this page drifted off into the night sky.</h1>
+    <a class="btn" href="/">Back home</a>
+  </section>
+</Base>
+
+<style>
+  .lost {
+    min-height: 100svh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1.5rem;
+    padding: 8rem 1.5rem 4rem;
+    text-align: center;
+    background: var(--night);
+    color: var(--cream);
+  }
+
+  h1 {
+    max-width: 18ch;
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.1;
+  }
+</style>

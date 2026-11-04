@@ -1,0 +1,120 @@
+---
+const links = [
+  { href: '/#work', label: 'Work' },
+  { href: '/about/', label: 'About' },
+  { href: '/cv/', label: 'CV' },
+];
+const path = Astro.url.pathname;
+---
+
+<header class="nav">
+  <div class="nav__inner wrap">
+    <a class="nav__logo" href="/" aria-label="Siya — home">
+      siya<span class="nav__spark" aria-hidden="true">✦</span>
+    </a>
+    <nav aria-label="Main">
+      <ul>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} aria-current={path === l.href ? 'page' : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    padding-block: 1rem;
+    view-transition-name: site-nav;
+    pointer-events: none;
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .nav__logo,
+  ul {
+    pointer-events: auto;
+  }
+
+  .nav__logo {
+    font: 400 2rem/1 var(--font-hand);
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--sun);
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    padding: 0.25em 0.6em 0.3em;
+    box-shadow: 3px 3px 0 var(--ink);
+    white-space: nowrap;
+    transition: transform 0.2s;
+  }
+
+  .nav__logo:hover {
+    transform: rotate(-4deg) scale(1.05);
+  }
+
+  .nav__spark {
+    display: inline-block;
+    color: var(--pink);
+    margin-left: 0.1em;
+    animation: twinkle 2.4s ease-in-out infinite;
+  }
+
+  ul {
+    display: flex;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0.3rem;
+    list-style: none;
+    background: var(--cream);
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  ul a {
+    display: block;
+    padding: 0.4em 0.9em;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  ul a:hover,
+  ul a[aria-current='page'] {
+    background: var(--pink);
+  }
+
+  @media (max-width: 480px) {
+    .nav__logo {
+      font-size: 1.6rem;
+    }
+
+    ul a {
+      padding: 0.35em 0.65em;
+      font-size: 0.95rem;
+    }
+  }
+
+  @keyframes twinkle {
+    50% {
+      transform: scale(0.6) rotate(45deg);
+      opacity: 0.6;
+    }
+  }
+</style>
