@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.jpg';
+
 const links = [
   { href: '/#work', label: 'Work' },
   { href: '/about/', label: 'About' },
@@ -10,7 +13,7 @@ const path = Astro.url.pathname;
 <header class="nav">
   <div class="nav__inner wrap">
     <a class="nav__logo" href="/" aria-label="Siya — home">
-      siya<span class="nav__spark" aria-hidden="true">✦</span>
+      <Image src={logo} alt="" width={64} height={64} densities={[1, 2]} loading="eager" />
     </a>
     <nav aria-label="Main">
       <ul>
@@ -51,27 +54,24 @@ const path = Astro.url.pathname;
   }
 
   .nav__logo {
-    font: 400 2rem/1 var(--font-hand);
-    text-decoration: none;
-    color: var(--ink);
-    background: var(--yellow);
+    display: block;
+    width: 64px;
+    height: 64px;
     border: 3px solid var(--ink);
-    border-radius: 999px;
-    padding: 0.25em 0.6em 0.3em;
+    border-radius: 50%;
+    overflow: hidden;
     box-shadow: 3px 3px 0 var(--ink);
-    white-space: nowrap;
     transition: transform 0.2s;
+  }
+
+  .nav__logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .nav__logo:hover {
     transform: rotate(-4deg) scale(1.05);
-  }
-
-  .nav__spark {
-    display: inline-block;
-    color: var(--hot);
-    margin-left: 0.1em;
-    animation: twinkle 2.4s ease-in-out infinite;
   }
 
   ul {
@@ -102,7 +102,8 @@ const path = Astro.url.pathname;
 
   @media (max-width: 480px) {
     .nav__logo {
-      font-size: 1.6rem;
+      width: 52px;
+      height: 52px;
     }
 
     ul a {
@@ -111,10 +112,4 @@ const path = Astro.url.pathname;
     }
   }
 
-  @keyframes twinkle {
-    50% {
-      transform: scale(0.6) rotate(45deg);
-      opacity: 0.6;
-    }
-  }
 </style>
